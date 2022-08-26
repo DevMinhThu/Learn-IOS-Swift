@@ -10,8 +10,11 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    /* === Tham chiếu tới UI element ===
-        - B1: Tạo IB (Interface Builder) giúp liên kết UI element với code.
+    /* === @IBOutlet: giúp tạo liên kết, tham chiếu tới UI element ===
+     
+        NOTE: có thể hiểu là @IBOutlet: khi thay đổi gì trong code thì sẽ thể hiện lên element đã được liên kết.
+     
+        - B1: Tạo IBOutlet (Interface Builder) giúp liên kết UI element với code.
             - Giữ Ctrl + chọn element => sau đó kéo vào cửa sổ code.
             - Phạm vi đặt: phía dưới "class ViewController" và phía trên "func viewDidLoad"
         
@@ -30,11 +33,24 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         // === B2: Tương tác với các element ===
-        diceeImageView1.image = #imageLiteral(resourceName: "DiceSix")
-        diceeImageView2.image = #imageLiteral(resourceName: "DiceThree")
-        diceeImageView2.alpha = 0.5
+        // diceeImageView1.image = #imageLiteral(resourceName: "DiceSix")
+        // diceeImageView2.image = #imageLiteral(resourceName: "DiceThree")
+        // diceeImageView2.alpha = 0.5
     }
-
-
+    
+    /* === Phát hiện tương tác người dùng => tạo liên kết hành động @IBAction ===
+     
+        NOTE: khi tương tác với các element đã liên kết => sẽ thực thi hành động gì đó đã được thiết kế trong code.
+        - Các bước thực hiện tương tự như IBOutlet
+        - Lựa chọn event tương ứng với mục đích muốn dùng.
+     
+    */
+    @IBAction func rollButtonPress(_ sender: UIButton) {
+        let arrayDicee = [#imageLiteral(resourceName: "DiceOne"), #imageLiteral(resourceName: "DiceTwo"), #imageLiteral(resourceName: "DiceThree"), #imageLiteral(resourceName: "DiceFour"), #imageLiteral(resourceName: "DiceFive"), #imageLiteral(resourceName: "DiceSix")]
+        
+        diceeImageView1.image = arrayDicee[Int.random(in: 0...5)]
+        diceeImageView2.image = arrayDicee[Int.random(in: 0...5)]
+    }
+    
 }
 
