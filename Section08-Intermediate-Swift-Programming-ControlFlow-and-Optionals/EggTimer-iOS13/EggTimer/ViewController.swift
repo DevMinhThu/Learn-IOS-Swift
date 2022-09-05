@@ -7,18 +7,19 @@
 //
 
 import UIKit
+import AVFoundation
 
 class ViewController: UIViewController {
     
+    @IBOutlet weak var progressBar: UIProgressView!
     @IBOutlet weak var titleLabel: UILabel!
     
-    let eggTimes : [String: Int] = ["Soft": 3, "Medium": 4, "Hard": 7]
-    
-    var secondsRemaining = 60
-    
+    let eggTimes : [String: Int] = ["Soft": 3, "Medium": 4, "Hard": 7] // Type: Dictionary
+    var totalTime = 0
+    var secondsPassed = 0
     var timer = Timer()
-    
     let seconds = 0.2
+    var player: AVAudioPlayer?
 
     @IBAction func hardnessSelected(_ sender: UIButton) {
         
@@ -31,7 +32,12 @@ class ViewController: UIViewController {
         */
         let hardness = sender.currentTitle!
         
-        secondsRemaining = eggTimes[hardness]!
+        // reset progress bar + title + secondsPassed
+        progressBar.progress = 0.0
+        secondsPassed = 0
+        titleLabel.text = hardness
+        
+        totalTime = eggTimes[hardness]!
         
         /*
             - Timer sẽ kích hoạt khi trứng được click
@@ -51,13 +57,16 @@ class ViewController: UIViewController {
     }
     
     @objc func updateCounter() {
-        if secondsRemaining > 0 {
-            print("\(secondsRemaining) seconds.")
-            secondsRemaining -= 1
+        if secondsPassed < totalTime {
+            secondsPassed += 1
+            progressBar.progress = Float(secondsPassed) / Float(totalTime)
         } else {
             timer.invalidate()
             titleLabel.text = "DONE!"
+            
+            let url = Bundle.main.url(forResource: "alarm_sound", withExtension: "mp3")
+            player = try! AVAudioPlayer(contentsOf: url!)
+            player?.play()
         }
     }
-    
 }
