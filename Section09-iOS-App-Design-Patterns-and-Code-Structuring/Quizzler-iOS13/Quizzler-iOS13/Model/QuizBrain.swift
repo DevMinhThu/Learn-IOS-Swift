@@ -1,20 +1,15 @@
 //
-//  ViewController.swift
+//  QuizBrain.swift
 //  Quizzler-iOS13
 //
-//  Created by MinhThu Vu on 05/09/2022.
-//  Copyright © 2022 The App Quizzler.
+//  Created by Vũ Minh Thư on 06/09/2022.
+//  Copyright © 2022 The App Brewery. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
-class ViewController: UIViewController {
-    
-    @IBOutlet weak var labelQuestion: UILabel!
-    @IBOutlet weak var progressBar: UIProgressView!
-    @IBOutlet weak var trueButton: UIButton!
-    @IBOutlet weak var falseButton: UIButton!
-    
+struct QuizBrain {
+    // tạo ra trong struct và không thể thay đổi được
     let quiz = [
         Question(q: "A slug's blood is green.", a: "True"),
         Question(q: "Approximately one quarter of human bones are in the feet.", a: "True"),
@@ -30,37 +25,39 @@ class ViewController: UIViewController {
         Question(q: "Chocolate affects a dog's heart and nervous system; a few ounces are enough to kill a small dog.", a: "True")
     ]
     
+    // tạo ra trong struct và không thể thay đổi được
     var numberQuestion = 0
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        // viewDidLoad() chỉ được kích hoạt 1 lần đầu tiên màn hình hiển thị
-        updateUI()
-    }
-    
-    
-    @IBAction func answerButtonPressed(_ sender: UIButton) {
-        let userAnswer = sender.currentTitle!
-        let actualAnswer = quiz[numberQuestion].answer
-        
-        if userAnswer == actualAnswer {
-            print("Correct!")
-        } else {
-            print("Wrong!")
-        }
-        
+    /*
+        - Hàm này làm thay đổi trạng thái (làm thay đổi thuộc tính numberQuestion ) của struct.
+        - Hàm này làm thuộc tính numberQuestion tăng lên 1 đơn vị.
+        - Trong khi struct là bất biến => phải sử dụng mutating để khắc phục lỗi bất biến của hàm.
+     
+    */
+    mutating func nextQuestion() {
         if numberQuestion + 1 < quiz.count {
             numberQuestion += 1
-        } else {
+        }   else {
             numberQuestion = 0
         }
-                
-        updateUI()
     }
     
-    func updateUI() {
-        labelQuestion.text = quiz[numberQuestion].text
+    func checkAnswer(_ answerUser: String) -> Bool {
+        if answerUser == quiz[numberQuestion].answer {
+            // correct
+            return true
+        } else {
+            // wrong
+            return false
+        }
+    }
+    
+    func getQuestionText() -> String {
+        return quiz[numberQuestion].text
+    }
+    
+    func getProgress() -> Float {
+        let progress = Float(numberQuestion + 1) / Float(quiz.count)
+        return progress
     }
 }
-
