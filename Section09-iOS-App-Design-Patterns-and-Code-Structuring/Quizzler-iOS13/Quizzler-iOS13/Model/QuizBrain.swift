@@ -27,6 +27,7 @@ struct QuizBrain {
     
     // tạo ra trong struct và không thể thay đổi được
     var numberQuestion = 0
+    var score = 0
     
     /*
         - Hàm này làm thay đổi trạng thái (làm thay đổi thuộc tính numberQuestion ) của struct.
@@ -39,12 +40,14 @@ struct QuizBrain {
             numberQuestion += 1
         }   else {
             numberQuestion = 0
+            score = 0
         }
     }
     
-    func checkAnswer(_ answerUser: String) -> Bool {
+    mutating func checkAnswer(_ answerUser: String) -> Bool {
         if answerUser == quiz[numberQuestion].answer {
             // correct
+            score += 1
             return true
         } else {
             // wrong
@@ -59,5 +62,9 @@ struct QuizBrain {
     func getProgress() -> Float {
         let progress = Float(numberQuestion + 1) / Float(quiz.count)
         return progress
+    }
+    
+    func getScore() -> Int {
+        return score
     }
 }
